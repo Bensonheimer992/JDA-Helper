@@ -2,6 +2,7 @@
 
 ## Installation
 
+### Current Version: [![](https://jitpack.io/v/Bensonheimer992/JDA-Helper.svg)](https://jitpack.io/#Bensonheimer992/JDA-Helper)
 
 ```xml
 <repository>
@@ -13,7 +14,7 @@
 <dependency>
     <groupId>com.github.Bensonheimer992</groupId>
     <artifactId>JDA-Helper</artifactId>
-    <version>-SNAPSHOT</version>
+    <version>x.y.z</version>
 </dependency>
 ```
 
