@@ -2,7 +2,6 @@
 
 ## Installation
 
----
 
 ```xml
 <repository>
@@ -20,7 +19,6 @@
 
 ## How to Create a Bot
 
----
 
 ### Playing Activity
 
