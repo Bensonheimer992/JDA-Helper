@@ -1,15 +1,13 @@
-package de.bensonheimer.Commands;
+package de.bensonheimer.Command;
 
-import de.bensonheimer.Command.CommandContext;
-import de.bensonheimer.Command.ICommand;
-import de.bensonheimer.JDAHelper;
+import de.bensonheimer.Commands.Help;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,10 +17,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 public class CommandManager extends ListenerAdapter {
     @Getter
     private final List<ICommand> commands = new ArrayList<>();
-    private Map<String, String> commandIds = new HashMap<>();
+    private final Map<String, String> commandIds = new HashMap<>();
 
     public CommandManager() {
         addCommand(new Help(this));

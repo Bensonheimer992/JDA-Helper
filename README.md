@@ -4,19 +4,47 @@
 
 ### Current Version: [![](https://jitpack.io/v/Bensonheimer992/JDA-Helper.svg)](https://jitpack.io/#Bensonheimer992/JDA-Helper)
 
+<details>
+ <summary>Maven</summary>
+
 ```xml
-<repository>
-	<id>jitpack.io</id>
-	<url>https://jitpack.io</url>
-</repository>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
 ```
 ```xml
-<dependency>
-    <groupId>com.github.Bensonheimer992</groupId>
-    <artifactId>JDA-Helper</artifactId>
-    <version>x.y.z</version>
-</dependency>
+    <dependency>
+        <groupId>com.github.Bensonheimer992</groupId>
+        <artifactId>JDA-Helper</artifactId>
+        <version>x.y.z</version>
+    </dependency>
 ```
+
+</details>
+
+<details>
+<summary>Gradle</summary>
+
+```
+dependencyResolutionManagement {
+		repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+		repositories {
+			mavenCentral()
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+
+```
+
+dependencies {
+		implementation 'com.github.User:Repo:Tag'
+}
+
+```
+
+</details>
 
 ## How to Create a Bot
 

@@ -2,7 +2,7 @@ package de.bensonheimer;
 
 import de.bensonheimer.Audio.MusicManager;
 import de.bensonheimer.Command.ICommand;
-import de.bensonheimer.Commands.CommandManager;
+import de.bensonheimer.Command.CommandManager;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,15 +22,18 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import static spark.Spark.port;
+
 public class JDAHelper {
     @Getter
     static Logger logger = LoggerFactory.getLogger(JDAHelper.class);;
-    private static final CommandManager commandManager = new CommandManager();
     @Getter
     private static final MusicManager musicManager = new MusicManager();
+    private static final CommandManager commandManager = new CommandManager();
+    private static final List<ListenerAdapter> pendingListeners = new ArrayList<>();
     private static JDA bot;
     public static Color EmbedColor;
-    private static final List<ListenerAdapter> pendingListeners = new ArrayList<>();
+    private static final String TRANSCRIPT_FOLDER = "transcript";
 
     public static void createBot(String token, OnlineStatus status, Activity.ActivityType activityType, String activityString, Color embedColor) {
         EmbedColor = embedColor;
@@ -89,6 +93,19 @@ public class JDAHelper {
         pendingListeners.clear();
     }
 
+//    private static void createTranscriptDirectory() {
+//        Path transcriptPath = Path.of(TRANSCRIPT_FOLDER);
+//
+//        try {
+//            if (!Files.exists(transcriptPath)) {
+//                Files.createDirectory(transcriptPath);
+//                logger.info("Creating Transcript Folder");
+//            }
+//        } catch (IOException e) {
+//            logger.error(e.getLocalizedMessage());
+//        }
+//    }
+
     public static void addCommand(ICommand command) {
         commandManager.addCommand(command);
     }
@@ -100,4 +117,14 @@ public class JDAHelper {
             pendingListeners.add(listenerAdapter);
         }
     }
+
+    public static Guild guildFromID(String id) throws InterruptedException {
+        Guild guild = bot.awaitReady().getGuildById(id);
+        return guild;
+    }
+
+//    public static void useTicketSystem(Guild guild, Integer categoryId, Integer transcriptServerPort) {
+//        port(transcriptServerPort);
+//        createTranscriptDirectory();
+//    }
 }

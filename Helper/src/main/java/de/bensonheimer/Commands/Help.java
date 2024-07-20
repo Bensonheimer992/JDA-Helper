@@ -11,9 +11,9 @@ import de.bensonheimer.Command.*;
 import java.util.List;
 
 public class Help implements ICommand {
-    private final de.bensonheimer.Commands.CommandManager manager;
+    private final de.bensonheimer.Command.CommandManager manager;
 
-    public Help(de.bensonheimer.Commands.CommandManager commandManager) {
+    public Help(de.bensonheimer.Command.CommandManager commandManager) {
         this.manager = commandManager;
     }
 

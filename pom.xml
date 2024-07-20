@@ -130,6 +130,16 @@
             <artifactId>common</artifactId>
             <version>1.4.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.Bensonheimer992</groupId>
+            <artifactId>Discord-HTML-Transcript</artifactId>
+            <version>431b7e0c44</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sparkjava</groupId>
+            <artifactId>spark-core</artifactId>
+            <version>2.9.4</version>
+        </dependency>
     </dependencies>
 
     <profiles>
