@@ -4,12 +4,10 @@ import de.bensonheimer.Audio.MusicManager;
 import de.bensonheimer.Command.ICommand;
 import de.bensonheimer.Command.CommandManager;
 import lombok.Getter;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -28,7 +26,7 @@ import static spark.Spark.port;
 
 public class JDAHelper {
     @Getter
-    static Logger logger = LoggerFactory.getLogger(JDAHelper.class);;
+    static Logger logger = LoggerFactory.getLogger(JDAHelper.class);
     @Getter
     private static final MusicManager musicManager = new MusicManager();
     private static final CommandManager commandManager = new CommandManager();

@@ -7,16 +7,11 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import de.bensonheimer.JDAHelper;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import dev.lavalink.youtube.clients.AndroidTestsuite;
 import dev.lavalink.youtube.clients.Music;
 import dev.lavalink.youtube.clients.Web;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Invite;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -120,25 +115,5 @@ public class PlayerManager {
             }
         });
         return future;
-    }
-
-    public String extractYouTubeVideoId(String url) {
-        if (url == null || url.trim().isEmpty()) {
-            return null;
-        }
-
-        String videoId = null;
-
-        if (url.contains("youtu.be/")) {
-            videoId = url.substring(url.lastIndexOf("/") + 1);
-        } else if (url.contains("youtube.com/watch?v=")) {
-            videoId = url.split("v=")[1];
-            int ampersandPosition = videoId.indexOf('&');
-            if (ampersandPosition != -1) {
-                videoId = videoId.substring(0, ampersandPosition);
-            }
-        }
-
-        return videoId;
     }
 }
