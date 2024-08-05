@@ -15,15 +15,13 @@ import dev.lavalink.youtube.clients.Music;
 import dev.lavalink.youtube.clients.Web;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Invite;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class PlayerManager {
     private static PlayerManager INSTANCE;
@@ -79,73 +77,49 @@ public class PlayerManager {
         }
     }
 
-    public void play(Guild guild, SlashCommandInteractionEvent event, String trackUrl) {
+    public CompletableFuture<AudioTrack> play(Guild guild, String trackUrl) {
         final GuildMusicManager guildMusicManager = this.getGuildMusicManager(guild);
+        CompletableFuture<AudioTrack> future = new CompletableFuture<>();
 
         this.audioPlayerManager.loadItemOrdered(guildMusicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
                 guildMusicManager.scheduler.queue(audioTrack);
                 cancelDisconnectTask(guild);
-
-                EmbedBuilder embedBuilder = new EmbedBuilder();
-                if (audioTrack.getInfo().uri.startsWith("https://www.youtube.com")) {
-                    sendEmbed(embedBuilder, audioTrack.getInfo().title, audioTrack.getInfo().uri, "https://img.youtube.com/vi/" + extractYouTubeVideoId(audioTrack.getInfo().uri) + "/maxresdefault.jpg", audioTrack.getInfo().author);
-                } else {
-                    sendEmbed(embedBuilder, audioTrack.getInfo().title, audioTrack.getInfo().uri, audioTrack.getInfo().artworkUrl, audioTrack.getInfo().author);
-                }
-
-                event.getHook().sendMessageEmbeds(embedBuilder.build()).queue();
+                future.complete(audioTrack);
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
-                if (trackUrl.startsWith("ytsearch:")) {
-                    if (!tracks.isEmpty()) {
-                        AudioTrack firstTrack = tracks.get(0);
+                if (!tracks.isEmpty()) {
+                    AudioTrack firstTrack = tracks.get(0);
+                    if (trackUrl.startsWith("ytsearch:")) {
                         guildMusicManager.scheduler.queue(firstTrack);
-                        cancelDisconnectTask(guild);
-
-                        EmbedBuilder embedBuilder = new EmbedBuilder();
-                        sendEmbed(embedBuilder, firstTrack.getInfo().title, firstTrack.getInfo().uri, "https://img.youtube.com/vi/" + extractYouTubeVideoId(firstTrack.getInfo().uri) + "/maxresdefault.jpg", firstTrack.getInfo().author);
-
-                        event.getHook().sendMessageEmbeds(embedBuilder.build()).queue();
-                    }
-                } else {
-                    AudioTrack firstTrack = audioPlaylist.getTracks().get(0);
-                    AudioTrackInfo trackInfo = firstTrack.getInfo();
-
-                    EmbedBuilder embedBuilder = new EmbedBuilder();
-                    embedBuilder.setColor(JDAHelper.EmbedColor);
-                    sendEmbed(embedBuilder, audioPlaylist.getName(), trackInfo.uri, "https://img.youtube.com/vi/" + extractYouTubeVideoId(trackInfo.uri) + "/maxresdefault.jpg", "Playlist mit " + audioPlaylist.getTracks().size() + " Tracks geladen");
-
-                    event.getHook().sendMessageEmbeds(embedBuilder.build()).queue();
-
-                    for (final AudioTrack track : tracks) {
-                        guildMusicManager.scheduler.queue(track);
+                        future.complete(firstTrack);
+                    } else {
+                        for (final AudioTrack track : tracks) {
+                            guildMusicManager.scheduler.queue(track);
+                        }
+                        future.complete(firstTrack);
                     }
                     cancelDisconnectTask(guild);
+                } else {
+                    future.complete(null);
                 }
             }
 
             @Override
             public void noMatches() {
-
+                future.complete(null);
             }
 
             @Override
             public void loadFailed(FriendlyException e) {
-
+                future.completeExceptionally(e);
             }
         });
-    }
-
-    public void sendEmbed(EmbedBuilder embedBuilder, String title, String url, String img, String footer) {
-        embedBuilder.setColor(JDAHelper.EmbedColor);
-        embedBuilder.setTitle(title, url);
-        embedBuilder.setImage(img);
-        embedBuilder.setFooter(footer);
+        return future;
     }
 
     public String extractYouTubeVideoId(String url) {

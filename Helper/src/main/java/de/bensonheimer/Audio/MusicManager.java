@@ -2,8 +2,6 @@ package de.bensonheimer.Audio;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import com.sun.tools.javac.Main;
-import de.bensonheimer.Command.CommandContext;
 import de.bensonheimer.Command.ICommandContext;
 import de.bensonheimer.JDAHelper;
 import de.bensonheimer.Utils.Localization;
@@ -11,14 +9,9 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.DiscordLocale;
-import net.dv8tion.jda.api.interactions.InteractionHook;
 
-import java.awt.Color;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class MusicManager {
@@ -27,7 +20,6 @@ public class MusicManager {
 
     public void play(ICommandContext commandContext, String trackUrl) {
         SlashCommandInteractionEvent event = commandContext.getEvent();
-        event.deferReply().queue();
         Member member = event.getMember();
         Member self = event.getGuild().getSelfMember();
         GuildVoiceState memberVoiceState = member.getVoiceState();
@@ -52,7 +44,28 @@ public class MusicManager {
         }
 
         PlayerManager playerManager = PlayerManager.getInstance();
-        playerManager.play(commandContext.getGuild(), event, link);
+        playerManager.play(commandContext.getGuild(), link).thenAccept(track -> {
+            AudioTrackInfo info = track.getInfo();
+
+            EmbedBuilder embedBuilder = new EmbedBuilder();
+            embedBuilder.setColor(JDAHelper.EmbedColor);
+            embedBuilder.setTitle(info.title, info.uri);
+            embedBuilder.addField(Localization.getInstance().getLocalizedMessage(event, "trackAuthor"), info.author, true);
+            embedBuilder.addField(Localization.getInstance().getLocalizedMessage(event, "trackDuration"), formatTime(info.length), true);
+
+            if (info.uri.contains("youtube.com")) {
+                embedBuilder.setImage("https://img.youtube.com/vi/" + extractYouTubeVideoId(info.uri) + "/maxresdefault.jpg");
+                embedBuilder.addField("Provider", "<:youtube:1264203893693222952> | Youtube", true);
+            } else if (info.uri.contains("spotify.com")) {
+                embedBuilder.setImage(info.artworkUrl);
+                embedBuilder.addField("Provider", "<:spotify:1264203805491204206> | Spotify", true);
+            }
+
+            event.replyEmbeds(embedBuilder.build()).setEphemeral(true).queue();
+        }).exceptionally(throwable -> {
+            JDAHelper.getLogger().error(throwable.getLocalizedMessage());
+            return null;
+        });
     }
 
     public void stop(ICommandContext commandContext) {

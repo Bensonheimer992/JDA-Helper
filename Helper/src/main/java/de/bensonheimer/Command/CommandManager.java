@@ -31,7 +31,7 @@ public class CommandManager extends ListenerAdapter {
         boolean nameFound = this.commands.stream().anyMatch((it) -> it.getName().equalsIgnoreCase(command.getName()));
 
         if (nameFound) {
-            throw new IllegalArgumentException("Ein Befehl mit diesem Namen existiert bereits");
+            throw new IllegalArgumentException("A Command with the name " + command.getName() + " already exists");
         }
 
         commands.add(command);
@@ -56,7 +56,7 @@ public class CommandManager extends ListenerAdapter {
             CommandContext ctx = new CommandContext(event);
             command.handle(ctx);
         } else {
-            event.reply("Ich kann diesen Befehl gerade nicht verarbeiten :(").setEphemeral(true).queue();
+            event.reply("Sorry but i can't handle Slash Commands right now :(").setEphemeral(true).queue();
         }
     }
 

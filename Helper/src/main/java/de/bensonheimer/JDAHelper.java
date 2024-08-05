@@ -4,10 +4,12 @@ import de.bensonheimer.Audio.MusicManager;
 import de.bensonheimer.Command.ICommand;
 import de.bensonheimer.Command.CommandManager;
 import lombok.Getter;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -93,19 +95,6 @@ public class JDAHelper {
         pendingListeners.clear();
     }
 
-//    private static void createTranscriptDirectory() {
-//        Path transcriptPath = Path.of(TRANSCRIPT_FOLDER);
-//
-//        try {
-//            if (!Files.exists(transcriptPath)) {
-//                Files.createDirectory(transcriptPath);
-//                logger.info("Creating Transcript Folder");
-//            }
-//        } catch (IOException e) {
-//            logger.error(e.getLocalizedMessage());
-//        }
-//    }
-
     public static void addCommand(ICommand command) {
         commandManager.addCommand(command);
     }
@@ -126,5 +115,18 @@ public class JDAHelper {
 //    public static void useTicketSystem(Guild guild, Integer categoryId, Integer transcriptServerPort) {
 //        port(transcriptServerPort);
 //        createTranscriptDirectory();
+//    }
+
+//        private static void createTranscriptDirectory() {
+//        Path transcriptPath = Path.of(TRANSCRIPT_FOLDER);
+//
+//        try {
+//            if (!Files.exists(transcriptPath)) {
+//                Files.createDirectory(transcriptPath);
+//                logger.info("Creating Transcript Folder");
+//            }
+//        } catch (IOException e) {
+//            logger.error(e.getLocalizedMessage());
+//        }
 //    }
 }
