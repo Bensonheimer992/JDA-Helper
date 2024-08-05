@@ -70,6 +70,12 @@
             <id>jitpack.io</id>
             <name>JitPack</name>
             <url>https://jitpack.io</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>dv8tion</id>
