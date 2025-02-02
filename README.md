@@ -39,7 +39,7 @@ dependencyResolutionManagement {
 ```
 
 dependencies {
-		implementation 'com.github.User:Repo:Tag'
+		implementation 'com.github.Bensonheimer992:JDA-Helper:x.y.z'
 }
 
 ```

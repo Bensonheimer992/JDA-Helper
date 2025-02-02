@@ -113,7 +113,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>5.0.1</version>
+            <version>5.2.3</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -135,11 +135,6 @@
             <groupId>dev.lavalink.youtube</groupId>
             <artifactId>common</artifactId>
             <version>1.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.Bensonheimer992</groupId>
-            <artifactId>Discord-HTML-Transcript</artifactId>
-            <version>431b7e0c44</version>
         </dependency>
         <dependency>
             <groupId>com.sparkjava</groupId>
