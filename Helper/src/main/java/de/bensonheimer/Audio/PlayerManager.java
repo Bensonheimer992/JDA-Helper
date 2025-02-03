@@ -8,7 +8,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
-import dev.lavalink.youtube.clients.AndroidTestsuite;
+import dev.lavalink.youtube.clients.Android;
 import dev.lavalink.youtube.clients.Music;
 import dev.lavalink.youtube.clients.Web;
 import net.dv8tion.jda.api.entities.Guild;
@@ -29,7 +29,7 @@ public class PlayerManager {
     public PlayerManager() {
         this.guildMusicManagers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
-        this.youtubeAudioSourceManager = new YoutubeAudioSourceManager(true, new Music(), new Web(), new AndroidTestsuite());
+        this.youtubeAudioSourceManager = new YoutubeAudioSourceManager(true, new Music(), new Web(), new Android());
         this.scheduler = Executors.newScheduledThreadPool(1);
         this.disconnectTasks = new HashMap<>();
 
